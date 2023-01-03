@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <title>GeoCarto - TO01</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="LP DAM - GeoCarto - TD01" />
+        <meta name="author" content="VASSEUR Pierre-Adrien" />
+</head>
+
+<body>
+<h1>TD01</h1>
+
+<h2>Exercice 1</h2>
+
+<div>
+        <h3>Avec <code>getCurrentPosition()</code></h3>
+
+        <p id="position1"></p>
+        <p id="precision1"></p>
+        <p id="speed1"></p>
+        <p id="date1"></p>
+
+        <h3>Avec <code>watchPosition()</code></h3>
+
+        <p id="position2"></p>
+        <p id="precision2"></p>
+        <p id="speed2"></p>
+        <p id="date2"></p>
+</div>
+
+<h2>Exercice 2</h2>
+
+<div>
+        <h3><code>deviceOrientation</code></h3>
+
+        <p id="alpha"></p>
+        <p id="beta"></p>
+        <p id="gamma"></p>
+
+        <h3><code>deviceMotion</code></h3>
+
+        <p id="acceleration"></p>
+        <p id="accelerationIncludingGravity"></p>
+        <p id="rotationRate"></p>
+
+</div>
+
+<script>
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const { latitude, longitude, altitude, speed, accuracy } = position.coords;
+
+            const positionEl = document.getElementById('position1');
+            const precisionEl = document.getElementById('precision1');
+            const speedEl = document.getElementById('speed1');
+            const dateEl = document.getElementById('date1');
+
+            positionEl.innerHTML = `Latitude: ${latitude} °, Longitude: ${longitude} °, Altitude: ${altitude} m`;
+            precisionEl.innerHTML = `Precision: ${accuracy} m`;
+            speedEl.innerHTML = `Speed: ${speed} m/s`;
+            dateEl.innerHTML = `Date: ${new Date(position.timestamp)}`;
+        });
+
+        navigator.geolocation.watchPosition((position) => {
+            const { latitude, longitude, altitude, speed, accuracy } = position.coords;
+
+            const positionEl = document.getElementById('position2');
+            const precisionEl = document.getElementById('precision2');
+            const speedEl = document.getElementById('speed2');
+            const dateEl = document.getElementById('date2');
+
+            positionEl.innerHTML = `Latitude: ${latitude} °, Longitude: ${longitude} °, Altitude: ${altitude} m`;
+            precisionEl.innerHTML = `Precision: ${accuracy} m`;
+            speedEl.innerHTML = `Speed: ${speed} m/s`;
+            dateEl.innerHTML = `Date: ${new Date(position.timestamp)}`;
+        });
+
+    } else {
+        window.alert('Geolocation is not available');
+    }
+
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', (event) => {
+            const { alpha, beta, gamma } = event;
+            const alphaEl = document.getElementById('alpha');
+            const betaEl = document.getElementById('beta');
+            const gammaEl = document.getElementById('gamma');
+
+            alphaEl.innerHTML = `Alpha: ${alpha} °`;
+            betaEl.innerHTML = `Beta: ${beta} °`;
+            gammaEl.innerHTML = `Gamma: ${gamma} °`;
+        });
+    }
+
+    if (window.DeviceMotionEvent) {
+        window.addEventListener('devicemotion', (event) => {
+            const { acceleration, accelerationIncludingGravity, rotationRate, interval } = event;
+            const accelerationEl = document.getElementById('acceleration');
+            const accelerationIncludingGravityEl = document.getElementById('accelerationIncludingGravity');
+            const rotationRateEl = document.getElementById('rotationRate');
+
+            accelerationEl.innerHTML = `Acceleration: ${acceleration.x} m/s², ${acceleration.y} m/s², ${acceleration.z} m/s²`;
+            accelerationIncludingGravityEl.innerHTML = `Acceleration including gravity: ${accelerationIncludingGravity.x} m/s², ${accelerationIncludingGravity.y} m/s², ${accelerationIncludingGravity.z} m/s²`;
+            rotationRateEl.innerHTML = `Rotation rate: ${rotationRate.alpha} °/s, ${rotationRate.beta} °/s, ${rotationRate.gamma} °/s`;
+        });
+    }
+</script>
+
+</body>
+
+</html>
